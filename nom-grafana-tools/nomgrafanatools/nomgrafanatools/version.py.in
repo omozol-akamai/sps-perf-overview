@@ -1,0 +1,13 @@
+#
+# Copyright (C) 2017 Nominum, Inc.
+#
+# All rights reserved.
+#
+
+VERSION = '@VERSION@'
+
+VER_MAJOR = @VER_MAJOR@
+VER_MINOR = @VER_MINOR@
+VER_FEATURE = @VER_FEATURE@
+VER_PATCH = @VER_PATCH@
+VER_RELTYPE = '@VER_RELTYPE@'

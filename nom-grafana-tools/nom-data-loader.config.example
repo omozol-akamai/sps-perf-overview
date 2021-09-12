@@ -1,0 +1,148 @@
+{
+    object => "influxdb"
+    host => "sps-node1"
+    password => "redwoodcity"
+}
+{
+    object => "influxdb-loader"
+    database-name => "n2"
+    kafka => {
+        topic => "nom-telemetry"
+        brokers => ("sps-node1:9092" "sps-node2:9092" "sps-node3:9092")
+    }
+    name => "telemetry"
+}
+{
+    object => "influxdb-tag"
+    tag-name => "qtype"
+    value => "qtype-value"
+    measurement => "cacheserve.resolver.statistics"
+    path => "queries-by-type"
+}
+{
+    object => "influxdb-tag"
+    tag-name => "rcode"
+    value => "rcode-value"
+    measurement => "cacheserve.resolver.statistics"
+    path => "responses-by-rcode"
+}
+{
+    object => "influxdb-tag"
+    tag-name => "version"
+    value => "version-value"
+    measurement => "cacheserve.server.information"
+    path => "version"
+}
+{
+    object => "influxdb-tag"
+    tag-name => "vertica-cluster-id"
+    value => "vertica-cluster-id-value"
+    measurement => "nom-data-loader.vertica.statistics"
+    path => "cluster-id"
+}
+{
+    object => "influxdb-tag"
+    tag-name => "vertica-node-id"
+    value => "vertica-node-id-value"
+    measurement => "nom-data-loader.vertica.statistics"
+    path => "vertica-node-id"
+}
+{
+    object => "influxdb-tag"
+    tag-name => "version"
+    value => "version-value"
+    measurement => "nom-proxy.server.information"
+    path => "version"
+}
+{
+    object => "influxdb-tag"
+    tag-name => "thread-type"
+    value => "thread-type-value"
+    measurement => "nom-proxy.server.usage"
+    path => "thread-groups"
+}
+{
+    object => "influxdb-tag"
+    tag-name => "allowed-url"
+    value => "allowed-value"
+    measurement => "nom-ssm.personal-internet.summary-statistics"
+    path => "allowed-urls"
+}
+{
+    object => "influxdb-tag"
+    tag-name => "blocked-url"
+    value => "blocked-value"
+    measurement => "nom-ssm.personal-internet.summary-statistics"
+    path => "blocked-urls"
+}
+{
+    object => "influxdb-tag"
+    tag-name => "category"
+    value => "category-value"
+    measurement => "nom-ssm.personal-internet.summary-statistics"
+    path => "categories-in-custom"
+}
+{
+    object => "influxdb-tag"
+    tag-name => "feature"
+    value => "feature-value"
+    measurement => "nom-ssm.personal-internet.summary-statistics"
+    path => "features"
+}
+{
+    object => "influxdb-tag"
+    tag-name => "web-filter"
+    value => "filter-value"
+    measurement => "nom-ssm.personal-internet.summary-statistics"
+    path => "web-filters"
+}
+{
+    object => "influxdb-tag"
+    tag-name => "allowed-url"
+    value => "allowed-value"
+    measurement => "nom-ssm.secure-business.summary-statistics"
+    path => "allowed-urls"
+}
+{
+    object => "influxdb-tag"
+    tag-name => "blocked-url"
+    value => "blocked-value"
+    measurement => "nom-ssm.secure-business.summary-statistics"
+    path => "blocked-urls"
+}
+{
+    object => "influxdb-tag"
+    tag-name => "category"
+    value => "category-value"
+    measurement => "nom-ssm.secure-business.summary-statistics"
+    path => "categories-in-custom"
+}
+{
+    object => "influxdb-tag"
+    tag-name => "feature"
+    value => "feature-value"
+    measurement => "nom-ssm.secure-business.summary-statistics"
+    path => "features"
+}
+{
+    object => "influxdb-tag"
+    tag-name => "web-filter"
+    value => "filter-value"
+    measurement => "nom-ssm.secure-business.summary-statistics"
+    path => "web-filters"
+}
+{
+    object => "layer"
+    priority => "0"
+    name => "operator"
+}
+{
+    object => "server"
+}
+{
+    object => "telemetry"
+    enable => "true"
+    kafka => {
+        brokers => ("sps-node1:9092" "sps-node2:9092" "sps-node3:9092")
+    }
+}

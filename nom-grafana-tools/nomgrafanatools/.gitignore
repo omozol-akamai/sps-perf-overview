@@ -1,0 +1,5 @@
+/VERSION
+/MANIFEST.in
+/dist
+/nomgrafanatools.egg-info
+*.pyc

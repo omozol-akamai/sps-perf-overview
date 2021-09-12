@@ -1,0 +1,59 @@
+# Copyright (C) 2017 Nominum, Inc.  All rights reserved.
+
+Import('context')
+
+subcontext = context.make_subcontext()
+env = subcontext.env
+
+# List of all files in the nomgrafanatools python package
+sources = Split('''
+    MANIFEST.in
+    VERSION
+    setup.py
+    nomgrafanatools/__init__.py
+    nomgrafanatools/grafanahttpapi.py
+    nomgrafanatools/version.py
+''')
+
+# Build version module with version of this product.
+subs = {
+    'VERSION': context.version.str_without_build(),
+    'VER_MAJOR': str(context.version.major),
+    'VER_MINOR': str(context.version.minor),
+    'VER_FEATURE': str(context.version.feature),
+    'VER_PATCH': str(context.version.patch),
+    'VER_BUILD': str(context.version.build),
+    'VER_RELTYPE': context.version.reltype_abbrev,
+}
+env.NomSubstitute('nomgrafanatools/version.py.in', vars=subs)
+# We omit reltype from VERSION because it is invalid under PEP-440.
+env.Command('VERSION', Value(context.version.str_without_reltype()), [
+    'echo %s > $TARGET' % context.version.str_without_reltype()
+])
+
+# Build the MANIFEST.in file
+manifest_in = env.Command(
+    'MANIFEST.in',
+    env.Value('\n'.join('include {}'.format(x) for x in sources)),
+    'echo $SOURCES > $TARGET',
+)
+
+# Since we use nompython to build the sdist, it is a dependency.
+# Since we don't make use of the SOURCES in our Command builder
+# below, we can just add it to sources.
+python_prog = subcontext['python-venv/PYTHON']
+sources.append(python_prog)
+
+target = 'dist/nomgrafanatools-{}.tar.gz'.format(
+    context.version.str_without_reltype()
+)
+nomgrafanatools_sdist = env.Command(target, sources, [
+    'rm -rf {}'.format(subcontext.absolute_path('build')),
+    'rm -rf {}'.format(subcontext.absolute_path('dist')),
+    'cd {} && {} setup.py sdist'.format(subcontext.root, python_prog),
+    'rm -rf {}'.format(subcontext.absolute_path('build')),
+])
+subcontext.add_build_alias(nomgrafanatools_sdist)
+
+env.NomPyExportSDist(nomgrafanatools_sdist, subfamily='nomgrafanatools',
+                     depends=['py-requests', 'pytoml'])

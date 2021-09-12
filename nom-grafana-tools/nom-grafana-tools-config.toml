@@ -1,0 +1,11 @@
+["Grafana Config"]
+hostname = 'grafana'
+port = 3000
+username = 'admin'
+password = 'admin'
+
+["Influx Config"]
+datasource_name = 'telemetry-influx'
+hostname = 'influxdb'
+port = 8086
+database = 'n2'

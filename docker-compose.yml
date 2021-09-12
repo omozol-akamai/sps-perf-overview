@@ -1,0 +1,36 @@
+---
+version: "2.4"
+
+services:
+  grafana:
+    container_name: grafana
+    image: grafana/grafana:latest
+    ports:
+      - "8080:3000"
+    expose:
+      - 3000
+    links:
+      - influxdb
+    networks:
+      - sps-perf-overview
+  influxdb:
+    container_name: influxdb
+    image: influxdb:${INFLUXDB_VERSION}
+    ports:
+      - "8086:8086"
+    expose:
+      - 8086
+    environment:
+      - INFLUXDB_ADMIN_ENABLED=true
+      - GOMAXPROCS=2
+    networks:
+      - sps-perf-overview
+    volumes:
+      - influx-volume:/var/lib/influxdb
+      - ${INFLUX_BACKUP_DIR}:/var/local/influx-backup
+
+networks:
+  sps-perf-overview:
+
+volumes:
+  influx-volume:
