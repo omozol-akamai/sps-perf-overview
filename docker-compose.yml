@@ -12,7 +12,7 @@ services:
     links:
       - influxdb
     networks:
-      - sps_perf
+      - net
   influxdb:
     container_name: influxdb
     image: influxdb:${INFLUXDB_VERSION}
@@ -24,13 +24,13 @@ services:
       - INFLUXDB_ADMIN_ENABLED=true
       - GOMAXPROCS=2
     networks:
-      - sps_perf
+      - net
     volumes:
       - influx:/var/lib/influxdb
       - ${INFLUX_BACKUP_DIR}:/var/local/influx-backup
 
 networks:
-  sps_perf:
+  net:
 
 volumes:
   influx:
