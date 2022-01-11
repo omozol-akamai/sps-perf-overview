@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-USAGE="Usage: setup.sh [ --start <path to influxdb backup tar-ball> [--legacy] | --stop ]"
+USAGE="Usage: setup.sh [ --start <absolute path to influxdb backup tar-ball> [--legacy] | --stop ]"
 
 # Docker vars
 INFLUX_CONTAINER="influxdb"
@@ -14,22 +14,12 @@ INFLUXDB_VERSION_LEGACY="1.3.5"
 function check_docker() {
   COMPOSE=$(which docker-compose)
   DOCKER=$(which docker)
-  if [[ -f $COMPOSE ]]
+  if [[ -f $COMPOSE && -f $DOCKER]]
   then
     echo "docker-compose is found $COMPOSE"
   else
     [[ "$OSTYPE" == "darwin"* ]] && echo "In order to run it on MacOSX please install docker & docker-compose for MacOSX" && exit 1
-    if [[ "$OSTYPE" == "linux-gnu"* ]]
-    then
-      echo "docker-compose is not found, attempting to install it"
-      [[ -f $(which yum) ]] && (yum install -y docker-compose || (echo "docker-compose installation via yum failed" && exit 1))
-      [[ -f $(which apt-get) ]] && (apt-get --assume-yes install docker-compose || (echo "docker-compose installation via apt-get failed" && exit 1))
-    else
-      echo "setup script doesn't support your platform, install manually docker-compose and try again" && exit 1
-    fi
-    COMPOSE=$(which docker-compose)
-    DOCKER=$(which docker)
-    [[ ! -f $COMPOSE ]] && echo "automatic attempt to install docker-compose failed, install manually docker-compose and try again" && exit 1
+    echo "In order to run it please install docker & docker-compose" && exit 1
   fi
 }
 
@@ -37,7 +27,7 @@ function start_env() {
   [[ ! -f $INFLUX_BACKUP ]] && echo "Provided argument is not a file" && echo "$USAGE" && exit 1
 
   export INFLUX_BACKUP_FILE=$(basename ${INFLUX_BACKUP})
-  export INFLUX_BACKUP_DIR="${PWD}/$(dirname ${INFLUX_BACKUP})"
+  export INFLUX_BACKUP_DIR="$(dirname ${INFLUX_BACKUP})"
   
   echo "Setting up environment"
   docker-compose up -d
