@@ -14,7 +14,7 @@ INFLUXDB_VERSION_LEGACY="1.3.5"
 function check_docker() {
   COMPOSE=$(which docker-compose)
   DOCKER=$(which docker)
-  if [[ -f $COMPOSE && -f $DOCKER]]
+  if [[ -f $COMPOSE && -f $DOCKER ]]
   then
     echo "docker-compose is found $COMPOSE"
   else
@@ -24,13 +24,16 @@ function check_docker() {
 }
 
 function start_env() {
+
+  check_docker
+
   [[ ! -f $INFLUX_BACKUP ]] && echo "Provided argument is not a file" && echo "$USAGE" && exit 1
 
   export INFLUX_BACKUP_FILE=$(basename ${INFLUX_BACKUP})
   export INFLUX_BACKUP_DIR="$(dirname ${INFLUX_BACKUP})"
   
   echo "Setting up environment"
-  docker-compose up -d
+  docker-compose up -d || exit 1
 
   docker exec -it $INFLUX_CONTAINER bash -c "echo 'Creating directory /var/local/influx-backup-unpacked for influxdb backup' && mkdir /var/local/influx-backup-unpacked"
   docker exec -it $INFLUX_CONTAINER bash -c "echo 'Unpacking influxdb backup' && tar -xf /var/local/influx-backup/${INFLUX_BACKUP_FILE} -C /var/local/influx-backup-unpacked"
@@ -50,6 +53,9 @@ function start_env() {
 }
 
 function stop_env(){
+
+  check_docker
+
   echo "Destroying environment"
   docker-compose down
   echo -n "Removing volume: " && docker volume rm ${DOCKER_INFLUX_VOLUME}
@@ -73,6 +79,9 @@ while [[ $# -gt 0 ]]; do
     --legacy)
       LEGACY="1"
       shift # past argument
+      ;;
+    -h|--help)
+      echo "$USAGE" && exit 0
       ;;
     *)    # unknown option
       POSITIONAL+=("$1") # save it in an array for later
