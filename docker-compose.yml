@@ -1,5 +1,5 @@
 ---
-version: "2.4"
+version: "2.3"
 
 services:
   grafana:
@@ -12,7 +12,7 @@ services:
     links:
       - influxdb
     networks:
-      - sps-perf-overview
+      - sps_perf
   influxdb:
     container_name: influxdb
     image: influxdb:${INFLUXDB_VERSION}
@@ -24,13 +24,13 @@ services:
       - INFLUXDB_ADMIN_ENABLED=true
       - GOMAXPROCS=2
     networks:
-      - sps-perf-overview
+      - sps_perf
     volumes:
-      - influx-volume:/var/lib/influxdb
+      - influx:/var/lib/influxdb
       - ${INFLUX_BACKUP_DIR}:/var/local/influx-backup
 
 networks:
-  sps-perf-overview:
+  sps_perf:
 
 volumes:
-  influx-volume:
+  influx:

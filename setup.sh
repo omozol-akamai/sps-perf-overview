@@ -4,8 +4,8 @@ USAGE="Usage: setup.sh [ --start <absolute path to influxdb backup tar-ball> [--
 
 # Docker vars
 INFLUX_CONTAINER="influxdb"
-DOCKER_NET="$(basename ${PWD})_sps-perf-overview"
-DOCKER_INFLUX_VOLUME="$(basename ${PWD})_influx-volume"
+DOCKER_NET="$(basename ${PWD})_sps_perf"
+DOCKER_INFLUX_VOLUME="$(basename ${PWD})_influx"
 
 # Iflux version
 INFLUXDB_VERSION_NEW="1.7.9"
