@@ -54,6 +54,13 @@ function start_env() {
   # DOCKER_NET=$(docker inspect influxdb -f '{{range $k, $v := .NetworkSettings.Networks}}{{printf "%s" $k}}{{end}}')
 
   docker run --rm --net=${DOCKER_NET} -v "${PWD}/dashboards/gs/:/usr/src/app/dashboards" omozolaka/setupgrafana:latest
+
+  # remove retention policies
+  docker exec $INFLUX_CONTAINER bash -c  "influx -execute 'DROP RETENTION POLICY rollup_370d ON n2'"
+  docker exec $INFLUX_CONTAINER bash -c  "influx -execute 'DROP RETENTION POLICY rollup_30d ON n2'"
+  docker exec $INFLUX_CONTAINER bash -c  "influx -execute 'DROP RETENTION POLICY rollup_3d ON n2'"
+  docker exec $INFLUX_CONTAINER bash -c  "influx -execute 'DROP RETENTION POLICY raw ON n2'"
+  docker exec $INFLUX_CONTAINER bash -c  "influx -execute 'DROP RETENTION POLICY autogen ON n2'"
 }
 
 function stop_env(){
