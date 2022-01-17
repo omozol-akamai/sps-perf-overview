@@ -56,11 +56,11 @@ function start_env() {
   docker run --rm --net=${DOCKER_NET} -v "${PWD}/dashboards/gs/:/usr/src/app/dashboards" omozolaka/setupgrafana:latest
 
   # remove retention policies
-  docker exec $INFLUX_CONTAINER bash -c  "influx -execute 'ALTER RETENTION POLICY \"rollup_370d\" ON \"n2\" DURATION 5y'"
-  docker exec $INFLUX_CONTAINER bash -c  "influx -execute 'ALTER RETENTION POLICY \"rollup_30d\" ON \"n2\" DURATION 5y'"
-  docker exec $INFLUX_CONTAINER bash -c  "influx -execute 'ALTER RETENTION POLICY \"rollup_3d\" ON \"n2\" DURATION 5y'"
-  docker exec $INFLUX_CONTAINER bash -c  "influx -execute 'ALTER RETENTION POLICY \"raw\" ON \"n2\" DURATION 5y'"
-  docker exec $INFLUX_CONTAINER bash -c  "influx -execute 'ALTER RETENTION POLICY \"autogen\" ON \"n2\" DURATION 5y'"
+  docker exec $INFLUX_CONTAINER bash -c  "influx -execute 'ALTER RETENTION POLICY \"rollup_370d\" ON \"n2\" DURATION 160000h'"
+  docker exec $INFLUX_CONTAINER bash -c  "influx -execute 'ALTER RETENTION POLICY \"rollup_30d\" ON \"n2\" DURATION 160000h'"
+  docker exec $INFLUX_CONTAINER bash -c  "influx -execute 'ALTER RETENTION POLICY \"rollup_3d\" ON \"n2\" DURATION 160000h'"
+  docker exec $INFLUX_CONTAINER bash -c  "influx -execute 'ALTER RETENTION POLICY \"raw\" ON \"n2\" DURATION 160000h'"
+  docker exec $INFLUX_CONTAINER bash -c  "influx -execute 'ALTER RETENTION POLICY \"autogen\" ON \"n2\" DURATION 160000h'"
 }
 
 function stop_env(){
